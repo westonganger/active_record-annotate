@@ -26,16 +26,17 @@ module ActiveRecord
           @lines.shift
         end
         
-        if configurator.yard?
-          backticks = '# ```'
-          annotation.unshift(backticks).push(backticks)
+        if annotation
+          if configurator.yard?
+            backticks = '# ```'
+            annotation.unshift(backticks).push(backticks)
+          end
+        
+          @lines.unshift(*annotation, nil)
         end
         
-        if annotation
-          @lines.unshift(*annotation, nil)
-          @lines.unshift(*magic_comments)
-          @lines.push(nil) # newline at the end of file
-        end
+        @lines.unshift(*magic_comments)
+        @lines.push(nil) # newline at the end of file
       end
       
       def write
