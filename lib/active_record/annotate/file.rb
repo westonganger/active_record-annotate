@@ -31,9 +31,11 @@ module ActiveRecord
           annotation.unshift(backticks).push(backticks)
         end
         
-        @lines.unshift(*annotation, nil)
-        @lines.unshift(*magic_comments)
-        @lines.push(nil) # newline at the end of file
+        if annotation
+          @lines.unshift(*annotation, nil)
+          @lines.unshift(*magic_comments)
+          @lines.push(nil) # newline at the end of file
+        end
       end
       
       def write
