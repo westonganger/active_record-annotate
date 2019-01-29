@@ -11,7 +11,11 @@ module ActiveRecord
             string_io.write("  # can't find table `#{table_name}`")
           end
           
-          process_annotation(string_io)
+          debug = false # TODO
+          
+          if string_io.string.start_with?("create_table ") || debug
+            process_annotation(string_io)
+          end
         end
         
       private
