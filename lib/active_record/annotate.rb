@@ -44,8 +44,10 @@ module ActiveRecord
           next if short_path.starts_with?('concerns') # skip any app/models/concerns files
 
           klass = class_name_for(short_path)
+
           next unless klass < ActiveRecord::Base # collect only AR::Base descendants
           next if klass.respond_to?(:abstract_class?) && klass.abstract_class?
+          next if configurator.ignored_models.includes?(klass)
 
           models[klass.table_name] << [path, klass]
         end
@@ -66,6 +68,7 @@ module ActiveRecord
       end
 
     private
+
       def models_dir
         Rails.root.join('app/models')
       end
@@ -73,6 +76,7 @@ module ActiveRecord
       def configurator
         @configurator ||= Configurator.new
       end
+
     end
   end
 end
